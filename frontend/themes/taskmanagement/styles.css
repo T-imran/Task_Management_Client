@@ -1,2 +1,77 @@
 @import url('./main-layout.css');
 @import url('line-awesome/dist/line-awesome/css/line-awesome.min.css');
+html{
+/* 	background: #FCF4EA; */
+	background: #f2f2f2;
+}
+
+.search{
+	
+  
+  }
+#header{
+	background:#44475a;
+	margin: 0px;
+	padding: 0px;
+}
+
+.all-btn{
+	background: #00114F;
+	color:#ffffff;
+	border-radius: 0px;
+}
+
+.text-field{
+	color: #ffffff;
+	
+}
+
+#main-title{
+	margin-top:0px;
+	margin-left:50%;
+	padding-top:10px;
+	color:#ffffff;
+	font-weight: bold;
+	
+}
+
+
+
+:host([theme~="grid-selection-theme"]) [part~="row"][selected] [part~="body-cell"]:not([part~="details-cell"]) {
+    background-color: #00114F;
+    color: #ffffff;
+}
+
+.div-border{
+  border-style: solid;
+  border-color: #0C1C57;
+  border-width: 2px;
+  border-radius: 0px;
+  margin:10px 20px 20px 20px;
+}
+
+.div-border2{
+  border-style: solid;
+  border-color: #0C1C57;
+  border-width: 2px;
+  border-radius: 0px;
+
+
+}
+
+.top-heading{
+	margin: -15px 0px 20px 0px;
+	color:#00114F;
+	text-decoration: underline;
+}
+
+#exit-btn{
+	color:red;
+/* 	background:red; */
+
+margin-top: -20px;
+}
+#exit-btn:hover{
+	color:#d63031;
+/* 	background:#d63031; */
+}

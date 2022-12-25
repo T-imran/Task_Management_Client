@@ -1,14 +1,18 @@
-package com.example.application.views;
+/*
+package com.example.application.client.views;
 
+import com.example.application.client.model.TaskModel;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.datepicker.DatePicker;
+import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
+import com.vaadin.flow.component.grid.ItemDoubleClickEvent;
 import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
@@ -17,31 +21,34 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.component.textfield.TextFieldVariant;
+import com.vaadin.flow.router.PageTitle;
+import com.vaadin.flow.router.Route;
+import elemental.json.Json;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-
-public class TaskView {
-
-
-        private static final Logger log = LoggerFactory.getLogger(SearchNid.class);
+@CssImport(value = "./themes/taskmanagement/Styles.css", themeFor = "vaadin-grid")
+@PageTitle("Search NID")
+@Route(value = "", layout = MainLayout.class)
+public class TaskView extends Div {
+        private static final Logger log = LoggerFactory.getLogger(TaskView.class);
         private static final String DUMMY_IMAGE = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTTg6FRpBIWpe4w9iStHT2G-LxQQo7QhxkrMg&usqp=CAU";
         // URL url = new URL ("https://reqres.in/api/users");
         // public static final String url = "http://localhost:8080/nid/status";
         String nidUrl = "http://localhost:8080/nid/status";
         private static final String emptyStr = "";
-        static Grid<NationalId> grid_1;
-        static Grid<NationalId> grid_2;
+        static Grid<TaskModel> grid_1;
+        static Grid<TaskModel> grid_2;
         public static final String failed = "Failed";
         public static final String success = "Successfully Loaded";
         String response;
-        Gson gson = new Gson();
-        List<NationalId> nidList;
+        Json gson = new Json();
+        List<TaskModel> nidList;
 
-	public SearchNid() {
+	public TaskView() {
 
         // Title --start
         Div titleText = new Div();
@@ -76,17 +83,17 @@ public class TaskView {
         searchBar.setClassName("search");
         HorizontalLayout searchBarLayout = new HorizontalLayout();
 
-        ComboBox comboBox = new ComboBox("Search Condition");
+        ComboBox comboBox = new ComboBox("Projects");
         comboBox.setId("condition-combox");
         List<String> comboList = new ArrayList<>();
-        comboList.add("All");
-        comboList.add("NID and DOB");
-        comboList.add("NID(only Internal DB)");
-        comboList.add("Date of Birth(only Internal DB)");
-        comboList.add("Name(only Internal DB)");
+        comboList.add("Project 1");
+        comboList.add("Project 2");
+        comboList.add("Project 3");
+        comboList.add("Project 4");
+        comboList.add("Project 5");
         comboBox.setItems(comboList);
 
-        TextField nid = new TextField("NID");
+        TextField nid = new TextField("De");
         nid.setId("nid-field");
         DatePicker date = new DatePicker("Date of Birth");
         date.setId("date-field");
@@ -114,7 +121,8 @@ public class TaskView {
         HorizontalLayout actionBtnLayout = new HorizontalLayout();
 
         Button search = new Button("Search", VaadinIcon.SEARCH.create(), e -> {
-            // Do Search Method Here
+           */
+/* // Do Search Method Here
             if(nid.getValue().isEmpty() && date.getValue()==null) {
 
                 Span success = new Span("Please Enter 'NID' and 'Date of Birth'");
@@ -135,7 +143,8 @@ public class TaskView {
             }
             else {
                 nidDetail(nid, date, "SELECT_NID_DETAILS");
-            }
+            }*//*
+
         });
         search.setId("search-button");
 
@@ -177,26 +186,20 @@ public class TaskView {
         textR.getStyle().set("font-size", "16px");
         gridvertical.setSpacing(false);
 
-        NidResultModel nidR = new NidResultModel();
-        nidR.setNid("123");
+
         // nidR.setCondition("NID and DOB");
 
         grid_1 = new Grid<>();
         grid_1.setClassName("my-grid");
         grid_1.setHeight("200px");
 
-        grid_1.addColumn(NationalId::getNidDetailsFrom).setWidth("120px").setHeader("Result Status").setSortable(true)
-                .setResizable(true);
-        grid_1.addColumn(NationalId::getNid).setWidth("120px").setHeader("NID").setSortable(true).setResizable(true);
-        grid_1.addColumn(NationalId::getDateOfBirth).setWidth("120px").setHeader("Date of Birth").setSortable(true)
-                .setResizable(true);
-        grid_1.addColumn(NationalId::getNameEnglish).setWidth("120px").setHeader("Name").setSortable(true)
-                .setResizable(true);
-        grid_1.addColumn(NationalId::getFatherName).setWidth("100px").setHeader("Father Name").setSortable(true)
+        grid_1.addColumn(TaskModel::getName).setWidth("120px").setHeader("Result Status").setSortable(true)
                 .setResizable(true);
 
+
         grid_1.addItemDoubleClickListener(doubleClikEvent -> {
-            Dialog dialog = new Dialog();
+            */
+/*Dialog dialog = new Dialog();
 
             dialog.removeAll();
             // log.info("double clicked {}", doubleClikEvent.getItem().getBranchName());
@@ -207,7 +210,8 @@ public class TaskView {
             dialog.getElement().setAttribute("aria-label", "Add note");
             dialog.setHeight("calc(85vh - (2*var(--lumo-space-s)))");
             dialog.setWidth("calc(90vw - (4*var(--lumo-space-s)))");
-            dialog.getElement().setAttribute("aria-label", "Add note");
+            dialog.getElement().setAttribute("aria-label", "Add note");*//*
+
 //
 //
 //			NidDetail nidDetail = new NidDetail();
@@ -232,9 +236,11 @@ public class TaskView {
                 dialog.setWidth("calc(90vw - (4*var(--lumo-space-s)))");
                 dialog.getElement().setAttribute("aria-label", "Add note");
 
-                NidDetail nidDetail = new NidDetail();
+          */
+/*      NidDetail nidDetail = new NidDetail();
                 dialog.add(nidDetail);
-                dialog.open();
+                dialog.open();*//*
+
             });
             return editButton;
         }).setWidth("100px").setFlexGrow(0).setFrozen(true).setHeader("Action").setVisible(false);
@@ -261,7 +267,7 @@ public class TaskView {
         textR2.getStyle().set("font-size", "16px");
 
         Button allRequest = new Button("All Request History Serch", e -> {
-            UI.getCurrent().navigate(RequestHistory.class);
+
         });
 
         allRequest.setClassName("all-btn");
@@ -277,35 +283,13 @@ public class TaskView {
         grid_2.setClassName("my-grid");
         grid_2.setHeight("370px");
 
-        grid_2.addColumn(NationalId::getNidDetailsFrom).setWidth("150px").setHeader("Hit/Miss Status").setSortable(true)
+        grid_2.addColumn(TaskModel::getName).setWidth("150px").setHeader("Hit/Miss Status").setSortable(true)
                 .setResizable(true);
-        grid_2.addColumn(NationalId::getNidDetailsFrom).setWidth("180px").setHeader("Search Condition")
-                .setSortable(true).setResizable(true);
-        grid_2.addColumn(NationalId::getNid).setWidth("200px").setHeader("NID").setSortable(true).setResizable(true);
-        grid_2.addColumn(NationalId::getDateOfBirth).setWidth("120px").setHeader("Date of Birth").setSortable(true)
-                .setResizable(true);
-        grid_2.addColumn(NationalId::getNameEnglish).setWidth("200px").setHeader("Name").setSortable(true)
-                .setResizable(true);
-        grid_2.addColumn(NationalId::getFatherName).setWidth("250px").setHeader("Father Name").setSortable(true)
-                .setResizable(true);
-        grid_2.addColumn(NationalId::getExtractTime).setWidth("200px").setHeader("Internal DB Save Date").setSortable(true)
-                .setResizable(true);
-        grid_2.addColumn(NationalId::getRequestedDate).setWidth("200px").setHeader("Search Date").setSortable(true)
-                .setResizable(true);
-        grid_2.addColumn(NationalId::getNid).setWidth("120px").setHeader("Searched By").setSortable(true)
-                .setResizable(true);
+
 
 
         grid_2.addItemDoubleClickListener(doubleClikEvent -> {
-//			Dialog dialog = new Dialog();
-//
-//			dialog.removeAll();
-//
-            NationalId getData = doubleClikEvent.getItem();
 
-            String nid3 =getData.getNid().toString();
-            String date3 = getData.getDateOfBirth().toString();
-            nidHistoryDetail(nid3,date3,"SELECT_NID_DETAILS");
         });
         // grid_2.getStyle().set("font-size", "8px");
         grid_2.addThemeVariants(GridVariant.LUMO_COLUMN_BORDERS, GridVariant.LUMO_COMPACT,
@@ -345,10 +329,11 @@ public class TaskView {
 
         // Main Page view
         add(padDiv, padDiv2);
-        history();
+        //history();
     }
 
-        private Div nidSearchDialogLayout(Dialog dialog, ItemDoubleClickEvent<NationalId> event) {
+       */
+/* private Div nidSearchDialogLayout(Dialog dialog, ItemDoubleClickEvent<TaskModel> event) {
 
 
 
@@ -897,9 +882,11 @@ public class TaskView {
         add(mainDiv);
 
         return mainDiv;
-    }
+    }*//*
 
-        private Div historyDialogLayout(Dialog dialog, NationalId nidRs) {
+
+      */
+/*  private Div historyDialogLayout(Dialog dialog, NationalId nidRs) {
 
 
 
@@ -1475,9 +1462,11 @@ public class TaskView {
         add(mainDiv);
 
         return mainDiv;
-    }
+    }*//*
 
 
+*/
+/*
         public Grid<NationalId> nidDetail(TextField nid, DatePicker date, String actionType) {
 
         NationalId nidRs = new NationalId();
@@ -1580,7 +1569,9 @@ public class TaskView {
         }
         return grid_2;
 
-    }
+    }*//*
+
 
     }
 
+*/
