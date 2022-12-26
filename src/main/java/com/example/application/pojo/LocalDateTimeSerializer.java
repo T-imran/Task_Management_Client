@@ -1,3 +1,4 @@
+/*
 package com.example.application.pojo;
 
 import com.example.application.model.TaskModel;
@@ -22,4 +23,4 @@ public class LocalDateTimeSerializer extends JsonSerializer<TaskModel> {
         jsonGenerator.writeStringField("endTime", DateUtility.formatDateTime(model.getEndTime()));
         jsonGenerator.writeEndObject();
     }
-}
+}*/

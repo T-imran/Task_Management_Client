@@ -1,8 +1,7 @@
-package com.example.application.client;
-import com.example.application.client.views.ProjectView;
+package com.example.application.client.api_requests;
+import com.example.application.client.views.TaskView;
 import com.example.application.model.TaskModel;
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.Module.SetupContext;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -42,7 +41,7 @@ public static void getAllTask() {
         gridTaskLists.add(task);
 
         }
-        ProjectView.taskGrid.setItems(gridTaskLists);
+        TaskView.taskGrid.setItems(gridTaskLists);
 
         } catch (IOException | InterruptedException e1) {
         // TODO Auto-generated catch block

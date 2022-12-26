@@ -15,7 +15,6 @@ import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.component.tabs.TabsVariant;
 import com.vaadin.flow.router.PageTitle;
-import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouterLink;
 import java.util.Optional;
 
@@ -137,8 +136,8 @@ public class MainLayout extends AppLayout {
 
     private Component[] createMenuItems() {
         return new Tab[]{
-                createTab(VaadinIcon.CREDIT_CARD,"TASKS", ProjectView.class),
-               createTab(VaadinIcon.LIST_UL,"PROJECTS", ProjectView.class)
+                createTab(VaadinIcon.CREDIT_CARD,"TASKS", TaskView.class),
+               createTab(VaadinIcon.LIST_UL,"PROJECTS", TaskView.class)
         };
     }
 
