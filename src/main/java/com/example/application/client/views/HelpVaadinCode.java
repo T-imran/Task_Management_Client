@@ -121,8 +121,7 @@ public class TaskView extends Div {
         HorizontalLayout actionBtnLayout = new HorizontalLayout();
 
         Button search = new Button("Search", VaadinIcon.SEARCH.create(), e -> {
-           */
-/* // Do Search Method Here
+ // Do Search Method Here
             if(nid.getValue().isEmpty() && date.getValue()==null) {
 
                 Span success = new Span("Please Enter 'NID' and 'Date of Birth'");
@@ -143,7 +142,7 @@ public class TaskView extends Div {
             }
             else {
                 nidDetail(nid, date, "SELECT_NID_DETAILS");
-            }*//*
+            }
 
         });
         search.setId("search-button");
@@ -198,8 +197,7 @@ public class TaskView extends Div {
 
 
         grid_1.addItemDoubleClickListener(doubleClikEvent -> {
-            */
-/*Dialog dialog = new Dialog();
+Dialog dialog = new Dialog();
 
             dialog.removeAll();
             // log.info("double clicked {}", doubleClikEvent.getItem().getBranchName());
@@ -210,7 +208,7 @@ public class TaskView extends Div {
             dialog.getElement().setAttribute("aria-label", "Add note");
             dialog.setHeight("calc(85vh - (2*var(--lumo-space-s)))");
             dialog.setWidth("calc(90vw - (4*var(--lumo-space-s)))");
-            dialog.getElement().setAttribute("aria-label", "Add note");*//*
+            dialog.getElement().setAttribute("aria-label", "Add note");
 
 //
 //
@@ -236,10 +234,9 @@ public class TaskView extends Div {
                 dialog.setWidth("calc(90vw - (4*var(--lumo-space-s)))");
                 dialog.getElement().setAttribute("aria-label", "Add note");
 
-          */
-/*      NidDetail nidDetail = new NidDetail();
+      NidDetail nidDetail = new NidDetail();
                 dialog.add(nidDetail);
-                dialog.open();*//*
+                dialog.open();
 
             });
             return editButton;
@@ -332,8 +329,7 @@ public class TaskView extends Div {
         //history();
     }
 
-       */
-/* private Div nidSearchDialogLayout(Dialog dialog, ItemDoubleClickEvent<TaskModel> event) {
+ private Div nidSearchDialogLayout(Dialog dialog, ItemDoubleClickEvent<TaskModel> event) {
 
 
 
@@ -882,11 +878,10 @@ public class TaskView extends Div {
         add(mainDiv);
 
         return mainDiv;
-    }*//*
+    }
 
 
-      */
-/*  private Div historyDialogLayout(Dialog dialog, NationalId nidRs) {
+  private Div historyDialogLayout(Dialog dialog, NationalId nidRs) {
 
 
 
@@ -1462,11 +1457,9 @@ public class TaskView extends Div {
         add(mainDiv);
 
         return mainDiv;
-    }*//*
+    }
 
 
-*/
-/*
         public Grid<NationalId> nidDetail(TextField nid, DatePicker date, String actionType) {
 
         NationalId nidRs = new NationalId();
@@ -1569,7 +1562,7 @@ public class TaskView extends Div {
         }
         return grid_2;
 
-    }*//*
+    }
 
 
     }

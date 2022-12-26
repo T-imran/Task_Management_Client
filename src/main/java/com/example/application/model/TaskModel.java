@@ -22,9 +22,9 @@ public class TaskModel {
     @Column(name = "task_title", nullable = false)
     String taskTitle;
 
-    //@JsonFormat(shape=JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     @Column(name = "task_date", nullable = false)
-    String taskDate;
+    LocalDate taskDate;
 
    // @JsonFormat(shape=JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     @Column(name = "task_start_time", nullable = false)

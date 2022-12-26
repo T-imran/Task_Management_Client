@@ -11,8 +11,6 @@ html{
   }
 #header{
 	background:#44475a;
-	margin: 0px;
-	padding: 0px;
 }
 
 .all-btn{
@@ -34,8 +32,6 @@ html{
 	font-weight: bold;
 	
 }
-
-
 
 :host([theme~="grid-selection-theme"]) [part~="row"][selected] [part~="body-cell"]:not([part~="details-cell"]) {
     background-color: #00114F;

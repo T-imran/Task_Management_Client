@@ -25,22 +25,11 @@ import java.util.Optional;
 @CssImport(value = "./themes/taskmanagement/tabs-styles.css", themeFor = "vaadin-tab")
 public class MainLayout extends AppLayout {
     private final Tabs menu;
-    private H4 viewTitle;
-    H3 mainTitle = new H3("TASK MANAGEMENT");
-
-
+    private H1 viewTitle;
 
     public MainLayout() {
-
-        mainTitle.setId("main-title");
-
-
-//    	Image image = new Image("https://www.tbsnews.net/sites/default/files/styles/amp_metadata_content_image_min_696px_wide/public/images/2019/09/11/community_bank_logo_final_converted_0.jpg?itok=5c-xipAl", "My Project logo");
-//        image.setId("title-image");
-//    	image.getStyle().set("height", "60px").set("width", "120px");
-
         // Use the drawer for the menu
-        setPrimarySection(Section.NAVBAR);
+        setPrimarySection(Section.DRAWER);
 
         // Make the nav bar a header
         addToNavbar(true, createHeaderContent());
@@ -50,31 +39,26 @@ public class MainLayout extends AppLayout {
         addToDrawer(createDrawerContent(menu));
     }
 
-
     private Component createHeaderContent() {
         HorizontalLayout layout = new HorizontalLayout();
 
         // Configure styling for the header
         layout.setId("header");
-        //layout.getThemeList().set("dark", true);
+        layout.getThemeList().set("dark", true);
         layout.setWidthFull();
         layout.setSpacing(false);
-        //layout.getStyle().set("background","#248CCC");
+        layout.setAlignItems(FlexComponent.Alignment.CENTER);
+
         // Have the drawer toggle button on the left
-        DrawerToggle toggle=new DrawerToggle();
-        toggle.getStyle().set("color", "#ffffff");
-        layout.add(toggle);
+        layout.add(new DrawerToggle());
 
         // Placeholder for the title of the current view.
         // The title will be set after navigation.
-        viewTitle = new H4();
-        viewTitle.setId("view-title");
-        //mainTitle.getStyle().set("margin-left","30%");
-        //layout.add(viewTitle);
-        layout.add(mainTitle);
-        layout.setAlignItems(FlexComponent.Alignment.CENTER);
+        viewTitle = new H1();
+        layout.add(viewTitle);
+
         // A user icon
-        //layout.add(new Image("Vaadin_Logo.png", "Avatar"));
+       // layout.add(new Image("images/user.svg", "Avatar"));
 
         return layout;
     }
@@ -84,10 +68,9 @@ public class MainLayout extends AppLayout {
 
         // Configure styling for the drawer
         layout.setSizeFull();
-        //layout.getThemeList().set("dark", true);
-        layout.getStyle().set("background","#44475a");
         layout.setPadding(false);
         layout.setSpacing(false);
+        layout.getStyle().set("background","#44475a");
         layout.getThemeList().set("spacing-s", true);
         layout.setAlignItems(FlexComponent.Alignment.STRETCH);
 
@@ -95,25 +78,11 @@ public class MainLayout extends AppLayout {
         HorizontalLayout logoLayout = new HorizontalLayout();
         logoLayout.setId("logo");
         logoLayout.setAlignItems(FlexComponent.Alignment.CENTER);
+        //logoLayout.add(new Image("images/logo.png", "My Project logo"));
+        //logoLayout.add(new H1("My Project"));
 
-
-//        File file = new File("C:\\Git\\Projects\\CIB\\gui\\CibReportingClient\\src\\main\\resources");
-//        Image image = new Image(new StreamResource("vaadin-logo.png", new InputStreamFactory() {
-//            @Override
-//            public InputStream createInputStream() {
-//                try {
-//                    return new FileInputStream(file);
-//                } catch (FileNotFoundException e) {
-//                    e.printStackTrace();
-//                }
-//                return null;
-//            }
-//        }), "alt text");
-//        logoLayout.add(image);
-        logoLayout.add(new H2());
-        logoLayout.getStyle().set("padding-left", "20px");
         // Display the logo and the menu in the drawer
-        layout.add(logoLayout,menu);
+        layout.add(logoLayout, menu);
         return layout;
     }
 
@@ -121,36 +90,23 @@ public class MainLayout extends AppLayout {
         final Tabs tabs = new Tabs();
         tabs.setOrientation(Tabs.Orientation.VERTICAL);
         tabs.addThemeVariants(TabsVariant.LUMO_SMALL);
-
-        //tabs.setId("tabs");
+        tabs.setId("tabs");
+        tabs.getStyle().set("margin-top","60px");
         tabs.add(createMenuItems());
-        tabs.getStyle().set("color", "#ffffff");
-//        tabs.addSelectedChangeListener(event -> {
-//		tabs.getSelectedTab().getStyle()./* set("border-radius", "35px"). */set("background", "orange").set("color", "#ffffff");
-//
-//
-//			});
-
         return tabs;
     }
 
     private Component[] createMenuItems() {
-        return new Tab[]{
-                createTab(VaadinIcon.CREDIT_CARD,"TASKS", TaskView.class),
-               createTab(VaadinIcon.LIST_UL,"PROJECTS", TaskView.class)
-        };
+        return new Tab[] {
+                createTab(VaadinIcon.LIST_UL,"Task List", TaskView.class),
+                createTab(VaadinIcon.LIST_UL,"About", TaskView.class) };
     }
 
-    private static Tab createTab(VaadinIcon viewIcon,String text, Class<? extends Component> navigationTarget) {
+    private static Tab createTab(VaadinIcon viewIcon,String text,
+                                 Class<? extends Component> navigationTarget) {
         final Tab tab = new Tab();
         Icon icon = viewIcon.create();
-//        icon.getStyle()
-//                .set("box-sizing", "border-box")
-//                .set("margin-inline-end", "var(--lumo-space-m)")
-//                .set("margin-inline-start", "var(--lumo-space-xs)")
-//                .set("padding", "var(--lumo-space-xs)");
-        RouterLink link = new RouterLink(text, navigationTarget);
-        tab.add(icon,link);
+        tab.add(icon,new RouterLink(text, navigationTarget));
         ComponentUtil.setData(tab, Class.class, navigationTarget);
         return tab;
     }
@@ -167,12 +123,13 @@ public class MainLayout extends AppLayout {
     }
 
     private Optional<Tab> getTabForComponent(Component component) {
-        return menu.getChildren().filter(tab -> ComponentUtil.getData(tab, Class.class).equals(component.getClass()))
+        return menu.getChildren()
+                .filter(tab -> ComponentUtil.getData(tab, Class.class)
+                        .equals(component.getClass()))
                 .findFirst().map(Tab.class::cast);
     }
 
     private String getCurrentPageTitle() {
         return getContent().getClass().getAnnotation(PageTitle.class).value();
     }
-
 }

@@ -42,7 +42,7 @@ import java.util.List;
 
 @CssImport(value = "./themes/taskmanagement/Styles.css", themeFor = "vaadin-grid")
 @PageTitle("")
-@Route(value = "project", layout = MainLayout.class)
+@Route(value = "", layout = MainLayout.class)
 public class TaskView extends Div {
 
     public static Grid<TaskModel> taskGrid;
@@ -53,35 +53,39 @@ public class TaskView extends Div {
     Json gson = new Json();
     List<TaskModel> nidList;
 
-    TaskView(){
+    TaskView() {
         Div mainDiv = new Div();
 
         Div subDiv = new Div();
-        subDiv.getStyle().set("margin","100px");
+        subDiv.getStyle().set("margin", "100px");
 
         Button createTask = new Button("Add task", VaadinIcon.PLUS.create());
-        createTask.addThemeVariants(ButtonVariant.LUMO_SMALL);
-        createTask.getStyle().set("color","#2ecc71");
+        createTask.addThemeVariants(ButtonVariant.LUMO_PRIMARY,ButtonVariant.LUMO_SUCCESS);
+        createTask.getStyle().set("margin-bottom", "20px");
         HorizontalLayout buttonHori = new HorizontalLayout(createTask);
         buttonHori.setAlignItems(FlexComponent.Alignment.END);
         buttonHori.setJustifyContentMode(FlexComponent.JustifyContentMode.END);
-        createTask.addClickListener(e->{
+        createTask.addClickListener(e -> {
             Dialog dialog = new Dialog();
             dialog.setHeaderTitle("Add Task");
             TextField taskTitle = new TextField("Task title");
-            TextField taskDate = new TextField();
-            TextField startDate = new TextField("Start Time");
+            DatePicker taskDate = new DatePicker("Task date");
+            TextField startDate = new TextField("Start time");
             TextField endDate = new TextField("End time");
-            HorizontalLayout dialogLayoutHorizontalLayout = new HorizontalLayout(taskTitle,taskDate,startDate,endDate);
+            HorizontalLayout dialogLayoutHorizontalLayout = new HorizontalLayout(taskTitle, taskDate, startDate, endDate);
             dialog.add(dialogLayoutHorizontalLayout);
             Button saveButton = new Button("Save");
-            saveButton.addClickListener(save->{
+            saveButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY,
+                    ButtonVariant.LUMO_PRIMARY);
+            saveButton.addClickListener(save -> {
                 TaskModel saveTask = new TaskModel();
                 saveTask.setTaskTitle(taskTitle.getValue());
                 saveTask.setTaskDate(taskDate.getValue());
                 saveTask.setStartTime(startDate.getValue());
                 saveTask.setEndTime(endDate.getValue());
                 var objectMapper = new ObjectMapper();
+                objectMapper.registerModule(new JavaTimeModule());
+                objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
                 String requestBody = null;
                 try {
                     requestBody = objectMapper
@@ -92,13 +96,13 @@ public class TaskView extends Div {
 
                 HttpClient client = HttpClient.newHttpClient();
                 HttpRequest request = HttpRequest.newBuilder()
-                        .uri(URI.create(url+"/save"))
+                        .uri(URI.create(url + "/save"))
                         .POST(HttpRequest.BodyPublishers.ofString(requestBody))
                         .header("Content-Type", "application/json")
                         .build();
 
                 try {
-                   response = client.send(request,
+                    response = client.send(request,
                             HttpResponse.BodyHandlers.ofString());
                 } catch (IOException ex) {
                     throw new RuntimeException(ex);
@@ -109,7 +113,12 @@ public class TaskView extends Div {
                 dialog.close();
                 Api_Request.getAllTask();
             });
-            Button cancelButton = new Button("Cancel", cancel -> dialog.close());
+            Button cancelButton = new Button("Cancel");
+            cancelButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY,
+                    ButtonVariant.LUMO_CONTRAST);
+            cancelButton.addClickListener(cancel -> {
+                dialog.close();
+            });
             dialog.getFooter().add(cancelButton);
             dialog.getFooter().add(saveButton);
             dialog.open();
@@ -132,14 +141,116 @@ public class TaskView extends Div {
 
         taskGrid.addThemeVariants(GridVariant.LUMO_COLUMN_BORDERS, GridVariant.LUMO_COMPACT,
                 GridVariant.LUMO_ROW_STRIPES);
+
+        taskGrid.addItemDoubleClickListener(doubleClick -> {
+
+            Dialog dialog = new Dialog();
+            dialog.setHeaderTitle("Add Task");
+            TextField taskID = new TextField("Task title");
+            taskID.setValue(doubleClick.getItem().getId().toString());
+
+            TextField taskTitle = new TextField("Task title");
+            taskTitle.setValue(doubleClick.getItem().getTaskTitle());
+
+            TextField taskDate = new TextField("Task date");
+            taskDate.setValue(doubleClick.getItem().getTaskDate().toString());
+
+            TextField startDate = new TextField("Start time");
+            startDate.setValue(doubleClick.getItem().getStartTime());
+
+            TextField endDate = new TextField("End time");
+            endDate.setValue(doubleClick.getItem().getEndTime());
+
+            HorizontalLayout dialogLayoutHorizontalLayout = new HorizontalLayout(taskTitle, taskDate, startDate, endDate);
+            dialog.add(dialogLayoutHorizontalLayout);
+            Button saveButton = new Button("Update");
+            saveButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+            saveButton.addClickListener(save -> {
+                TaskModel saveTask = new TaskModel();
+                saveTask.setId(Long.parseLong(taskID.getValue()));
+                saveTask.setTaskTitle(taskTitle.getValue());
+                saveTask.setTaskDate(LocalDate.parse(taskDate.getValue()));
+                saveTask.setStartTime(startDate.getValue());
+                saveTask.setEndTime(endDate.getValue());
+                var objectMapper = new ObjectMapper();
+                objectMapper.registerModule(new JavaTimeModule());
+                objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+                String requestBody = null;
+                try {
+                    requestBody = objectMapper
+                            .writeValueAsString(saveTask);
+                } catch (JsonProcessingException ex) {
+                    throw new RuntimeException(ex);
+                }
+
+                HttpClient client = HttpClient.newHttpClient();
+                HttpRequest request = HttpRequest.newBuilder()
+                        .uri(URI.create(url + "/save"))
+                        .POST(HttpRequest.BodyPublishers.ofString(requestBody))
+                        .header("Content-Type", "application/json")
+                        .build();
+
+                try {
+                    response = client.send(request,
+                            HttpResponse.BodyHandlers.ofString());
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                } catch (InterruptedException ex) {
+                    throw new RuntimeException(ex);
+                }
+                System.out.println(response.body());
+                dialog.close();
+                Api_Request.getAllTask();
+            });
+            Button cancelButton = new Button("Cancel");
+            cancelButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY,
+                    ButtonVariant.LUMO_CONTRAST);
+            cancelButton.getStyle().set("margin-left","auto");
+            cancelButton.addClickListener(cancelUpdate -> {
+                dialog.close();
+            });
+            Button deleteButton = new Button("Delete");
+            deleteButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY,
+                    ButtonVariant.LUMO_ERROR);
+            deleteButton.addClickListener(cancel -> {
+                var objectMapper = new ObjectMapper();
+                String requestBody = null;
+                try {
+                    requestBody = objectMapper
+                            .writeValueAsString(null);
+                } catch (JsonProcessingException ex) {
+                    throw new RuntimeException(ex);
+                }
+
+                HttpClient client = HttpClient.newHttpClient();
+                HttpRequest request = HttpRequest.newBuilder()
+                        .uri(URI.create(url + "/delete?id=" + doubleClick.getItem().getId()))
+                        .DELETE()
+                        .header("Content-Type", "application/json")
+                        .build();
+
+                try {
+                    response = client.send(request,
+                            HttpResponse.BodyHandlers.ofString());
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                } catch (InterruptedException ex) {
+                    throw new RuntimeException(ex);
+                }
+                System.out.println(response.body());
+                dialog.close();
+                Api_Request.getAllTask();
+            });
+            dialog.getFooter().add(deleteButton);
+            dialog.getFooter().add(cancelButton);
+            dialog.getFooter().add(saveButton);
+            dialog.open();
+        });
         Api_Request.getAllTask();
         gridHorizontalLayout1.add(taskGrid);
 
 
-
-
-
-        subDiv.add(buttonHori,gridHorizontalLayout1);
+        subDiv.add(buttonHori, gridHorizontalLayout1);
         mainDiv.add(subDiv);
         add(mainDiv);
     }
