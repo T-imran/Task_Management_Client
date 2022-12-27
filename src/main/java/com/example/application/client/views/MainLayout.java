@@ -50,7 +50,9 @@ public class MainLayout extends AppLayout {
         layout.setAlignItems(FlexComponent.Alignment.CENTER);
 
         // Have the drawer toggle button on the left
-        layout.add(new DrawerToggle());
+        DrawerToggle toggle=new DrawerToggle();
+        toggle.getStyle().set("color", "#ffffff");
+        layout.add(toggle);
 
         // Placeholder for the title of the current view.
         // The title will be set after navigation.
