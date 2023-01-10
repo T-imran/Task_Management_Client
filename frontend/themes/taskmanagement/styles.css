@@ -71,3 +71,11 @@ margin-top: -20px;
 	color:#d63031;
 /* 	background:#d63031; */
 }
+
+.high-rating {
+	background-color: #b1ffb7;
+}
+
+.low-rating {
+	background-color: #ffd9d9;
+}
