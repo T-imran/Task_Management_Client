@@ -22,15 +22,22 @@ public class TaskModel {
     @Column(name = "task_title", nullable = false)
     String taskTitle;
 
-    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     @Column(name = "task_date", nullable = false)
     LocalDate taskDate;
 
-   // @JsonFormat(shape=JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    // @JsonFormat(shape=JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     @Column(name = "task_start_time", nullable = false)
-   String startTime;
+    String startTime;
 
-   // @JsonFormat(shape=JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    // @JsonFormat(shape=JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     @Column(name = "task_end_time", nullable = false)
-   String endTime;
+    String endTime;
+
+    @Column(name = "total_time", nullable = false)
+    String totalTime;
+
+    @Column(name = "status", nullable = false)
+    String status;
+
 }
