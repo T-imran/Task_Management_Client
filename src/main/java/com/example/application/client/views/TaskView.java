@@ -132,6 +132,8 @@ public class TaskView extends Div {
         taskGrid.setHeight("600px");
 
         Grid.Column<TaskModel> editColumn = taskGrid.addComponentColumn(person -> {
+            Button viewButton = new Button("View");
+            viewButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY,ButtonVariant.LUMO_CONTRAST,ButtonVariant.LUMO_SMALL);
             Button editButton = new Button("Edit");
             editButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY, ButtonVariant.LUMO_SMALL);
             editButton.addClickListener(doubleClick -> {
@@ -164,8 +166,7 @@ public class TaskView extends Div {
                 status.setValue(person.getStatus());
 
 
-
-                HorizontalLayout dialogLayoutHorizontalLayout = new HorizontalLayout(taskTitle, taskDate, startDate, endDate,totalTime,status);
+                HorizontalLayout dialogLayoutHorizontalLayout = new HorizontalLayout(taskTitle, taskDate, startDate, endDate, totalTime, status);
                 dialog.add(dialogLayoutHorizontalLayout);
                 Button saveButton = new Button("Update");
                 saveButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
@@ -203,12 +204,12 @@ public class TaskView extends Div {
                 dialog.getFooter().add(saveButton);
                 dialog.open();
             });
-            return editButton;
-        }).setHeader("Action").setWidth("120px").setFlexGrow(0);
+            return new HorizontalLayout(viewButton, editButton);
+        }).setHeader("Action").setWidth("180px").setFlexGrow(0);
 
         taskGrid.addColumn(TaskModel::getId).setWidth("75px").setHeader("ID").setSortable(true)
                 .setResizable(true);
-        taskGrid.addColumn(TaskModel::getTaskTitle).setWidth("800px").setHeader("Task Name").setSortable(true)
+        taskGrid.addColumn(TaskModel::getTaskTitle).setWidth("600px").setHeader("Task Name").setSortable(true)
                 .setResizable(true);
         taskGrid.addColumn(TaskModel::getTaskDate).setWidth("120px").setHeader("Date").setSortable(true)
                 .setResizable(true);
@@ -216,132 +217,31 @@ public class TaskView extends Div {
                 .setResizable(true);
         taskGrid.addColumn(TaskModel::getEndTime).setWidth("120px").setHeader("End Time").setSortable(true)
                 .setResizable(true);
-//        taskGrid.addColumn(TaskModel::getSpend_time).setWidth("190px").setHeader("Spend Time").setSortable(true)
-//                .setResizable(true);
-//        taskGrid.addColumn(TaskModel::getStatus).setWidth("190px").setHeader("Status").setSortable(true)
-//                .setResizable(true);
+        taskGrid.addColumn(TaskModel::getTotalTime).setWidth("190px").setHeader("Estimated Time").setSortable(true)
+                .setResizable(true);
+        taskGrid.addColumn(TaskModel::getStatus).setWidth("190px").setHeader("Status").setSortable(true)
+                .setResizable(true);
 
-        taskGrid.getColumns().get(4).setClassNameGenerator(person -> {
-            if (person.getEndTime().equals("start"))
-                return "high-rating";
-            if (person.getEndTime().equals("end"))
-                return "low-rating";
+        taskGrid.getColumns().get(7).setClassNameGenerator(person -> {
+            if (person.getStatus().equals("Not Started")) {
+                return "not-started";
+            }
+            if (person.getStatus().equals("In Progress")) {
+                return "in-progress";
+            }
+            if (person.getStatus().equals("Complete")) {
+                return "complete";
+            }
             return null;
         });
 
 
         taskGrid.addThemeVariants(GridVariant.LUMO_COLUMN_BORDERS, GridVariant.LUMO_COMPACT,
                 GridVariant.LUMO_ROW_STRIPES);
-
-
-        /*taskGrid.addItemDoubleClickListener(doubleClick -> {
-
-            Dialog dialog = new Dialog();
-            dialog.setHeaderTitle("Add Task");
-            TextField taskID = new TextField("Task title");
-            taskID.setValue(doubleClick.getItem().getId().toString());
-
-            TextField taskTitle = new TextField("Task title");
-            taskTitle.setValue(doubleClick.getItem().getTaskTitle());
-
-            TextField taskDate = new TextField("Task date");
-            taskDate.setValue(doubleClick.getItem().getTaskDate().toString());
-
-            TextField startDate = new TextField("Start time");
-            startDate.setValue(doubleClick.getItem().getStartTime());
-
-            TextField endDate = new TextField("End time");
-            endDate.setValue(doubleClick.getItem().getEndTime());
-
-            HorizontalLayout dialogLayoutHorizontalLayout = new HorizontalLayout(taskTitle, taskDate, startDate, endDate);
-            dialog.add(dialogLayoutHorizontalLayout);
-            Button saveButton = new Button("Update");
-            saveButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-            saveButton.addClickListener(save -> {
-                TaskModel saveTask = new TaskModel();
-                saveTask.setId(Long.parseLong(taskID.getValue()));
-                saveTask.setTaskTitle(taskTitle.getValue());
-                saveTask.setTaskDate(LocalDate.parse(taskDate.getValue()));
-                saveTask.setStartTime(startDate.getValue());
-                saveTask.setEndTime(endDate.getValue());
-                var objectMapper = new ObjectMapper();
-                objectMapper.registerModule(new JavaTimeModule());
-                objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
-                String requestBody = null;
-                try {
-                    requestBody = objectMapper
-                            .writeValueAsString(saveTask);
-                } catch (JsonProcessingException ex) {
-                    throw new RuntimeException(ex);
-                }
-
-                HttpClient client = HttpClient.newHttpClient();
-                HttpRequest request = HttpRequest.newBuilder()
-                        .uri(URI.create(url + "/save"))
-                        .POST(HttpRequest.BodyPublishers.ofString(requestBody))
-                        .header("Content-Type", "application/json")
-                        .build();
-
-                try {
-                    response = client.send(request,
-                            HttpResponse.BodyHandlers.ofString());
-                } catch (IOException ex) {
-                    throw new RuntimeException(ex);
-                } catch (InterruptedException ex) {
-                    throw new RuntimeException(ex);
-                }
-                System.out.println(response.body());
-                dialog.close();
-                Api_Request.getAllTask();
-            });
-            Button cancelButton = new Button("Cancel");
-            cancelButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY,
-                    ButtonVariant.LUMO_CONTRAST);
-            cancelButton.getStyle().set("margin-left", "auto");
-            cancelButton.addClickListener(cancelUpdate -> {
-                dialog.close();
-            });
-            Button deleteButton = new Button("Delete");
-            deleteButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY,
-                    ButtonVariant.LUMO_ERROR);
-            deleteButton.addClickListener(cancel -> {
-                var objectMapper = new ObjectMapper();
-                String requestBody = null;
-                try {
-                    requestBody = objectMapper
-                            .writeValueAsString(null);
-                } catch (JsonProcessingException ex) {
-                    throw new RuntimeException(ex);
-                }
-
-                HttpClient client = HttpClient.newHttpClient();
-                HttpRequest request = HttpRequest.newBuilder()
-                        .uri(URI.create(url + "/delete?id=" + doubleClick.getItem().getId()))
-                        .DELETE()
-                        .header("Content-Type", "application/json")
-                        .build();
-
-                try {
-                    response = client.send(request,
-                            HttpResponse.BodyHandlers.ofString());
-                } catch (IOException ex) {
-                    throw new RuntimeException(ex);
-                } catch (InterruptedException ex) {
-                    throw new RuntimeException(ex);
-                }
-                System.out.println(response.body());
-                dialog.close();
-                Api_Request.getAllTask();
-            });
-            dialog.getFooter().add(deleteButton);
-            dialog.getFooter().add(cancelButton);
-            dialog.getFooter().add(saveButton);
-            dialog.open();
-        });*/
         ApiRequest.getAllTask();
         gridHorizontalLayout1.add(taskGrid);
 
-
+        //Sub div and Main Div
         subDiv.add(buttonHori, gridHorizontalLayout1);
         mainDiv.add(subDiv);
         add(mainDiv);

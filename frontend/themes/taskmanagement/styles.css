@@ -72,10 +72,12 @@ margin-top: -20px;
 /* 	background:#d63031; */
 }
 
-.high-rating {
+.complete {
 	background-color: #b1ffb7;
 }
-
-.low-rating {
+.in-progress {
+	background-color: #fff2d9;
+}
+.not-started {
 	background-color: #ffd9d9;
 }

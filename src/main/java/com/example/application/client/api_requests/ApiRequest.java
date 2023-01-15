@@ -20,7 +20,9 @@ public class ApiRequest {
     private static final String url = "http://localhost:8080/task";
     public static HttpResponse<String> response;
 
-
+    /**
+     * Send response and get all data from db and show it to grid list view
+     */
     public static void getAllTask() {
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
@@ -47,6 +49,9 @@ public class ApiRequest {
         System.out.print(response);
     }
 
+    /**
+     *    Send response to save or update data
+     */
     public static void saveTask(TaskModel saveTaskList) {
         var objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JavaTimeModule());
@@ -75,6 +80,9 @@ public class ApiRequest {
         System.out.println(response.body());
     }
 
+    /**
+     *Send response to delete data by id
+     */
     public static void deleteTask(Long id){
 
         HttpClient client = HttpClient.newHttpClient();
