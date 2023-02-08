@@ -1,4 +1,4 @@
-package com.example.application.client.component_utility;
+package com.example.application.component_utility;
 
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;

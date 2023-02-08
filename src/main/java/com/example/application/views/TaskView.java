@@ -1,12 +1,8 @@
-package com.example.application.client.views;
+package com.example.application.views;
 
 
-import com.example.application.client.api_requests.ApiRequest;
+import com.example.application.api_requests.ApiRequest;
 import com.example.application.model.TaskModel;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
@@ -25,18 +21,14 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import elemental.json.Json;
 
-import java.io.IOException;
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-@CssImport(value = "./themes/taskmanagement/Styles.css", themeFor = "vaadin-grid")
+@CssImport(value = "./themes/taskmanagement/styles.css", themeFor = "vaadin-grid")
 @PageTitle("")
-@Route(value = "", layout = MainLayout.class)
+@Route(value = "task", layout = MainLayout.class)
 public class TaskView extends Div {
 
     public static Grid<TaskModel> taskGrid;

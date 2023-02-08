@@ -1,0 +1,3 @@
+:host { color: #ffffff; }
+:host(:hover) { color: #ffffff; }
+:host([selected]) { color: #ffffff; background: orange;  }

@@ -6,6 +6,7 @@ import com.vaadin.flow.server.PWA;
 import com.vaadin.flow.theme.Theme;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 
 /**
  * The entry point of the Spring Boot application.
@@ -14,7 +15,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * and some desktop browsers.
  *
  */
-@SpringBootApplication
+@SpringBootApplication(exclude = {DataSourceAutoConfiguration.class })
 @Theme(value = "taskmanagement")
 @PWA(name = "task management", shortName = "task management", offlineResources = {})
 @NpmPackage(value = "line-awesome", version = "1.3.0")
